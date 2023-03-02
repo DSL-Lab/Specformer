@@ -1,0 +1,13 @@
+{
+  "nlayer": 10,
+  "nheads": 16,
+  "hidden_dim": 400,
+  "trans_dropout": 0.05,
+  "feat_dropout": 0.05,
+  "adj_dropout": 0.05,
+  "lr": 2e-4,
+  "weight_decay": 0.0,
+  "epochs": 150,
+  "warm_up_epoch": 10,
+  "batch_size": 64
+}

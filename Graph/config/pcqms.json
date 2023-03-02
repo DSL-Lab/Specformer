@@ -1,0 +1,14 @@
+{
+  "nlayer": 6,
+  "nheads": 8,
+  "hidden_dim": 240,
+  "filter_poly": 12,
+  "trans_dropout": 0.3,
+  "feat_dropout": 0.1,
+  "adj_dropout": 0.1,
+  "lr": 5e-4,
+  "weight_decay": 5e-4,
+  "epochs": 100,
+  "warm_up_epoch": 5,
+  "batch_size": 256
+}
