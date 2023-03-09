@@ -122,49 +122,6 @@ def collate_dgl(samples):
         return E, U, batched_graph, length, labels
 
 
-def collate_pyg(graphs):
-    graph_list = []
-    length = []
-    E = []
-    U = []
-    Y = []
-
-    max_nodes = max([g.num_nodes for g in graphs])
-
-    for g in graphs:
-        num_nodes = g.num_nodes
-
-        e = g.e
-        u = g.u.view(num_nodes, num_nodes)
-        
-        pad_e = e.new_zeros([max_nodes])
-        pad_e[:num_nodes] = e
-
-        pad_u = u.new_zeros([max_nodes, max_nodes])
-        pad_u[:num_nodes, :num_nodes] = u
-
-        E.append(pad_e)
-        U.append(pad_u)
-        Y.append(g.y.view(-1))
-        length.append(num_nodes)
-        
-        fully_connected = torch.ones([num_nodes, num_nodes], dtype=torch.float).nonzero(as_tuple=True)
-        dgl_graph = dgl.graph(fully_connected, num_nodes = num_nodes)
-        edge_attr_dense = to_dense_adj(g.edge_index, edge_attr=g.edge_attr, 
-                                       max_num_nodes=num_nodes).squeeze(0).view(-1, g.edge_attr.shape[-1])
-        dgl_graph.ndata['feat'] = torch.zeros(num_nodes, 1)
-        dgl_graph.edata['feat'] = edge_attr_dense
-        graph_list.append(dgl_graph)
-
-    E = torch.stack(E, 0)
-    U = torch.stack(U, 0)
-    Y = torch.stack(Y, 0)
-    length = torch.LongTensor(length)
-    batched_graph = dgl.batch(graph_list, ndata=['feat'], edata=['feat'])
-
-    return E, U, batched_graph, length, Y
-
-
 def collate_pad(batch):
     E = []
     U = []
