@@ -188,7 +188,6 @@ class SpecformerMedium(nn.Module):
 
         eig = self.eig_encoder(e)
 
-        '''
         mha_eig = self.mha_norm(eig)
         mha_eig, attn = self.mha(mha_eig, mha_eig, mha_eig, key_padding_mask=e_mask)
         eig = eig + self.mha_dropout(mha_eig)
@@ -196,7 +195,6 @@ class SpecformerMedium(nn.Module):
         ffn_eig = self.ffn_norm(eig)
         ffn_eig = self.ffn(ffn_eig)
         eig = eig + self.ffn_dropout(ffn_eig)
-        '''
 
         new_e = self.decoder(eig).transpose(2, 1)      # [B, m, N]
         diag_e = torch.diag_embed(new_e)               # [B, m, N, N]
